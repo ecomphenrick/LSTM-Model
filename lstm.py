@@ -100,26 +100,4 @@ print(f"Mean Absolute Error (MAE): {mae}")
 rmse = np.sqrt(np.mean((y_test_scaled - predictions) ** 2))
 print(f"Root Mean Squared Error (RMSE): {rmse}")
 
-capital = 10000
-posicao = 0
-n = 5  # período da média móvel
-
-# calcula média móvel das previsões
-pred_ma = np.convolve(predictions.flatten(), np.ones(n)/n, mode='valid')
-
-for i in range(1, len(pred_ma)):
-    if pred_ma[i] > pred_ma[i-1]:  # tendência de alta
-        if posicao == 0:
-            posicao = capital / y_test_scaled[i+n-1]
-            capital = 0
-    elif pred_ma[i] < pred_ma[i-1]:  # tendência de baixa
-        if posicao > 0:
-            capital = posicao * y_test_scaled[i+n-1]
-            posicao = 0
-
-# valor final
-if posicao > 0:
-    capital = posicao * y_test_scaled[-1]
-
-print(f"Capital final após estratégia com média móvel: {capital}")
 
